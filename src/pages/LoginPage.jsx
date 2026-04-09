@@ -60,15 +60,15 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl border border-gray-200 shadow-sm p-10 w-full max-w-sm">
-        <h1 className="text-xl font-semibold text-gray-900 mb-1 text-center">Legal Assistant</h1>
-        <p className="text-sm text-gray-500 mb-8 text-center">
+    <div className="min-h-screen bg-background font-body flex items-center justify-center">
+      <div className="bg-white rounded-2xl border border-surface-container-high shadow-sm p-10 w-full max-w-sm">
+        <h1 className="text-2xl font-headline font-black tracking-tighter text-on-background mb-1 text-center">Pericles</h1>
+        <p className="text-sm text-outline mb-8 text-center">
           {mode === 'login' ? 'Sign in to continue' : 'Create your account'}
         </p>
 
         {error && (
-          <p className="text-sm text-red-600 mb-4 text-center">{error}</p>
+          <p className="text-sm text-error mb-4 text-center">{error}</p>
         )}
 
         {/* Email/password form */}
@@ -80,7 +80,7 @@ export default function LoginPage() {
             onChange={(e) => setEmail(e.target.value)}
             required
             disabled={loading}
-            className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60"
+            className="w-full px-4 py-3 rounded-xl border border-surface-container-high text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-transparent disabled:opacity-60"
           />
           <input
             type="password"
@@ -89,22 +89,22 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             required
             disabled={loading}
-            className="w-full px-4 py-3 rounded-xl border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:opacity-60"
+            className="w-full px-4 py-3 rounded-xl border border-surface-container-high text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-transparent disabled:opacity-60"
           />
           <button
             type="submit"
             disabled={loading}
-            className="w-full px-4 py-3 bg-blue-700 text-white rounded-xl text-sm font-medium hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+            className="w-full px-4 py-3 bg-primary text-on-primary rounded-xl text-sm font-medium hover:bg-primary-dim disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
           >
             {loading ? '...' : mode === 'login' ? 'Sign in' : 'Register'}
           </button>
         </form>
 
-        <p className="text-xs text-center text-gray-500 mb-4">
+        <p className="text-xs text-center text-outline mb-4">
           {mode === 'login' ? "Don't have an account? " : 'Already have an account? '}
           <button
             onClick={() => { setMode(mode === 'login' ? 'register' : 'login'); setError(null) }}
-            className="text-blue-600 hover:underline"
+            className="text-primary hover:underline"
           >
             {mode === 'login' ? 'Register' : 'Sign in'}
           </button>

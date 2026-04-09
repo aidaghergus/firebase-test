@@ -9,12 +9,12 @@ function SourceBadge({ source }) {
     <div className="mt-1 text-xs">
       <button
         onClick={() => setExpanded(!expanded)}
-        className="text-blue-600 hover:underline font-medium"
+        className="text-primary hover:underline font-medium"
       >
         {source.name} {expanded ? '▲' : '▼'}
       </button>
       {expanded && (
-        <p className="mt-1 p-2 bg-gray-100 rounded-lg text-gray-600 leading-relaxed italic">
+        <p className="mt-1 p-2 bg-surface-container rounded-lg text-on-surface-variant leading-relaxed italic">
           {source.excerpt}
         </p>
       )}
@@ -25,25 +25,29 @@ function SourceBadge({ source }) {
 function Message({ msg }) {
   const isUser = msg.role === 'user'
   return (
-    <div className={`flex ${isUser ? 'justify-end' : 'justify-start'} mb-4`}>
-      <div className={`max-w-[75%] flex flex-col ${isUser ? 'items-end' : 'items-start'}`}>
-        <div
-          className={`px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap ${
-            isUser
-              ? 'bg-blue-700 text-white rounded-br-sm'
-              : 'bg-white border border-gray-200 text-gray-800 rounded-bl-sm shadow-sm'
-          }`}
-        >
+    <div className={`flex items-start gap-4 max-w-3xl ${isUser ? 'ml-auto flex-row-reverse' : ''}`}>
+      <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${isUser ? 'bg-surface-container-highest' : 'bg-primary-container'}`}>
+        <span className="material-symbols-outlined text-lg" style={!isUser ? { fontVariationSettings: "'FILL' 1", color: '#515d84' } : { color: '#2a3439' }}>
+          {isUser ? 'person' : 'smart_toy'}
+        </span>
+      </div>
+      <div className={`space-y-2 ${isUser ? 'text-right' : ''}`}>
+        <div className={`p-5 rounded-2xl shadow-sm text-sm leading-relaxed whitespace-pre-wrap ${
+          isUser
+            ? 'bg-primary text-on-primary rounded-tr-none shadow-lg'
+            : 'chat-bubble-agent border border-surface-container-high text-on-surface rounded-tl-none'
+        }`}>
           {msg.content}
         </div>
         {msg.sources?.length > 0 && (
-          <div className="mt-2 px-1 w-full">
-            <p className="text-xs text-gray-400 mb-1">Sources:</p>
-            {msg.sources.map((s, i) => (
-              <SourceBadge key={i} source={s} />
-            ))}
+          <div className="px-1">
+            <p className="text-[10px] uppercase tracking-widest text-outline font-bold mb-1">Sources</p>
+            {msg.sources.map((s, i) => <SourceBadge key={i} source={s} />)}
           </div>
         )}
+        <span className="text-[10px] uppercase tracking-widest text-outline font-bold px-1">
+          {isUser ? 'You' : 'Pericles Agent'}
+        </span>
       </div>
     </div>
   )
@@ -54,8 +58,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([
     {
       role: 'model',
-      content:
-        'Hello. I am your legal assistant. I can answer questions based on the documents available in the knowledge base. How can I help you?',
+      content: 'Good day, Counsel. I am Pericles, your legal assistant. I can answer questions based on the documents available in the knowledge base. How can I help you?',
     },
   ])
   const [input, setInput] = useState('')
@@ -67,7 +70,7 @@ export default function ChatPage() {
   }, [messages])
 
   async function sendMessage(e) {
-    e.preventDefault()
+    e?.preventDefault()
     if (!input.trim() || loading) return
 
     const userMessage = { role: 'user', content: input.trim() }
@@ -77,87 +80,141 @@ export default function ChatPage() {
     setLoading(true)
 
     try {
-      // Build history for the model (skip greeting, exclude current message)
-      const history = newMessages
-        .slice(1, -1)
-        .map((m) => ({ role: m.role, content: m.content }))
-
+      const history = newMessages.slice(1, -1).map((m) => ({ role: m.role, content: m.content }))
       const result = await chatFn({ message: userMessage.content, history })
       const { answer, sources } = result.data
       setMessages([...newMessages, { role: 'model', content: answer, sources }])
     } catch (err) {
       console.error(err)
-      setMessages([
-        ...newMessages,
-        { role: 'model', content: 'An error occurred. Please try again.' },
-      ])
+      setMessages([...newMessages, { role: 'model', content: 'An error occurred. Please try again.' }])
     } finally {
       setLoading(false)
     }
   }
 
+  function handleQuickAction(text) {
+    setInput(text)
+  }
+
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm flex-shrink-0">
-        <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-semibold text-gray-900">Legal Assistant</h1>
-            <p className="text-xs text-gray-500">Answers based on your firm's documents</p>
+    <div className="flex h-screen overflow-hidden bg-background font-body text-on-surface">
+
+      {/* Left Sidebar */}
+      <aside className="hidden md:flex flex-col h-full border-r border-surface-container-high bg-surface-container-low w-72 text-sm">
+        <div className="p-8">
+          <h2 className="font-headline font-bold text-on-background text-xl">Pericles</h2>
+          <p className="text-xs text-outline mt-1">Legal Assistant</p>
+        </div>
+        <nav className="flex-1 px-0">
+          <ul className="space-y-1">
+            <li>
+              <a className="bg-white text-on-background rounded-r-full py-3 px-6 shadow-sm font-semibold flex items-center gap-3 hover:translate-x-1 transition-transform" href="#">
+                <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
+                Legal Assistant
+              </a>
+            </li>
+            <li>
+              <a href="/admin" className="text-outline px-6 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors hover:translate-x-1 hover:text-on-background">
+                <span className="material-symbols-outlined">folder_managed</span>
+                Document Vault
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div className="mt-auto p-4 flex flex-col gap-1 border-t border-surface-container-high">
+          <div className="px-6 py-2 flex items-center gap-3">
+            <span className="material-symbols-outlined text-lg text-outline">account_circle</span>
+            <span className="text-xs text-on-surface-variant truncate">{user?.displayName || user?.email}</span>
           </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{user?.displayName || user?.email}</span>
+          <button
+            onClick={() => signOut(auth)}
+            className="text-outline px-6 py-2 flex items-center gap-3 text-xs hover:bg-surface-container-high transition-colors"
+          >
+            <span className="material-symbols-outlined text-lg">logout</span>
+            Sign out
+          </button>
+        </div>
+      </aside>
+
+      {/* Main */}
+      <main className="flex-1 flex flex-col bg-white overflow-hidden">
+
+        {/* Top Header */}
+        <header className="sticky top-0 z-50 bg-surface/80 backdrop-blur-lg flex justify-between items-center px-8 py-4 shadow-sm border-b border-surface-container-high/50">
+          <div className="flex items-center gap-6">
+            <h1 className="text-xl font-headline font-black tracking-tighter text-on-background md:hidden">Pericles</h1>
+            <nav className="hidden md:flex items-center gap-6 font-headline font-medium tracking-tight text-sm">
+              <span className="text-primary border-b-2 border-primary pb-1 font-bold">Assistant</span>
+              <a href="/admin" className="text-outline hover:text-on-background transition-colors">Documents</a>
+            </nav>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="hidden md:block text-sm text-on-surface-variant">{user?.displayName || user?.email}</span>
             <button
               onClick={() => signOut(auth)}
-              className="text-sm text-gray-500 hover:text-gray-700"
+              className="text-xs text-outline hover:text-on-surface transition-colors px-3 py-1.5 rounded-lg hover:bg-surface-container-low"
             >
               Sign out
             </button>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* Messages */}
-      <main className="flex-1 overflow-y-auto px-4 py-6">
-        <div className="max-w-3xl mx-auto">
+        {/* Chat Area */}
+        <div className="flex-1 overflow-y-auto px-6 lg:px-12 py-8 custom-scrollbar space-y-8">
           {messages.map((msg, i) => (
             <Message key={i} msg={msg} />
           ))}
           {loading && (
-            <div className="flex justify-start mb-4">
-              <div className="bg-white border border-gray-200 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
+            <div className="flex items-start gap-4 max-w-3xl">
+              <div className="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-lg text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
+              </div>
+              <div className="chat-bubble-agent border border-surface-container-high rounded-2xl rounded-tl-none px-5 py-4 shadow-sm">
                 <div className="flex space-x-1.5 items-center h-4">
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:0ms]" />
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:150ms]" />
-                  <span className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:300ms]" />
+                  <span className="w-2 h-2 bg-outline rounded-full animate-bounce [animation-delay:0ms]" />
+                  <span className="w-2 h-2 bg-outline rounded-full animate-bounce [animation-delay:150ms]" />
+                  <span className="w-2 h-2 bg-outline rounded-full animate-bounce [animation-delay:300ms]" />
                 </div>
               </div>
             </div>
           )}
           <div ref={bottomRef} />
         </div>
-      </main>
 
-      {/* Input */}
-      <div className="bg-white border-t border-gray-200 px-4 py-4 flex-shrink-0">
-        <form onSubmit={sendMessage} className="max-w-3xl mx-auto flex gap-3">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask a legal question..."
-            disabled={loading}
-            className="flex-1 px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm disabled:opacity-60"
-          />
-          <button
-            type="submit"
-            disabled={!input.trim() || loading}
-            className="px-5 py-3 bg-blue-700 text-white rounded-xl font-medium text-sm hover:bg-blue-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-          >
-            Send
-          </button>
-        </form>
-      </div>
+        {/* Input */}
+        <div className="px-6 lg:px-12 py-5 border-t border-surface-container-high bg-white">
+          <div className="bg-surface-container-low rounded-2xl p-2 focus-within:ring-2 ring-primary/20 transition-all shadow-sm">
+            <form onSubmit={sendMessage} className="flex items-center gap-3 px-3 py-2">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder="Type your legal query or ask to analyze a document..."
+                disabled={loading}
+                className="flex-1 bg-transparent border-none focus:ring-0 text-on-surface placeholder:text-outline text-sm font-medium outline-none disabled:opacity-60"
+              />
+              <button
+                type="submit"
+                disabled={!input.trim() || loading}
+                className="bg-primary text-on-primary p-3 rounded-xl hover:bg-primary-dim transition-all flex items-center justify-center active:scale-95 shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span className="material-symbols-outlined text-lg" style={{ fontVariationSettings: "'FILL' 1" }}>send</span>
+              </button>
+            </form>
+          </div>
+          <div className="flex gap-4 mt-3 px-2">
+            {['Summarize latest document', 'What are the key risks?', 'Find relevant clauses'].map((action) => (
+              <button
+                key={action}
+                onClick={() => handleQuickAction(action)}
+                className="text-[10px] text-outline uppercase font-bold tracking-tighter hover:text-primary transition-colors"
+              >
+                {action}
+              </button>
+            ))}
+          </div>
+        </div>
+      </main>
     </div>
   )
 }
