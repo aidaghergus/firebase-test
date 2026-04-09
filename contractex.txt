@@ -1,0 +1,40 @@
+ CONTRATO DE PRESTACIÓN DE SERVICIOS
+
+  Madrid, 24 de marzo de 2026
+
+  PARTES:
+
+  EL PRESTADOR: Juan García López, con DNI 12345678A, domicilio en Calle Gran Vía 45, 28013 Madrid.
+
+  EL CLIENTE: Empresa Tecnológica SL, con CIF B87654321, domicilio en Calle Serrano 12, 28001 Madrid, representada por María Fernández Ruiz.
+
+  OBJETO DEL CONTRATO:
+  El Prestador se compromete a desarrollar una aplicación web de gestión de clientes para el Cliente, según las especificaciones acordadas en el Anexo I.
+
+  DURACIÓN:
+  El contrato tendrá una duración de 6 meses, desde el 1 de abril de 2026 hasta el 30 de septiembre de 2026, prorrogable por acuerdo mutuo.
+
+  PRECIO Y FORMA DE PAGO:
+  El Cliente abonará al Prestador la cantidad de 12.000€ (doce mil euros) más IVA, pagaderos en cuotas mensuales de 2.000€ los primeros 5 días de cada mes. El
+  impago de dos cuotas consecutivas facultará al Prestador a resolver el contrato.
+
+  CONFIDENCIALIDAD:
+  Ambas partes se comprometen a mantener la más estricta confidencialidad sobre la información intercambiada durante la ejecución del contrato. Esta obligación se
+   extenderá por un período de 3 años tras la finalización del contrato.
+
+  PROPIEDAD INTELECTUAL:
+  Los derechos de propiedad intelectual sobre los entregables serán transferidos al Cliente una vez abonado el importe total del contrato.
+
+  RESOLUCIÓN DEL CONTRATO:
+  Cualquiera de las partes podrá resolver el contrato con un preaviso de 30 días mediante comunicación escrita. En caso de incumplimiento grave, la resolución
+  será inmediata.
+
+  JURISDICCIÓN:
+  Las partes se someten a los Juzgados y Tribunales de Madrid para la resolución de cualquier controversia derivada del presente contrato, renunciando
+  expresamente a cualquier otro fuero.
+
+  Firmado en Madrid, a 24 de marzo de 2026.
+
+  Juan García López — El Prestador
+
+  María Fernández Ruiz — En representación de Empresa Tecnológica SL

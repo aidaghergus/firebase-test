@@ -1,0 +1,104 @@
+EXPLICACIÓN TÉCNICA DEL SISTEMA DE ASISTENTE LEGAL
+====================================================
+
+Preparado para: Despacho de Abogados
+Fecha: Marzo 2026
+
+
+POR QUÉ NO SE PUEDE USAR NOTEBOOK LM
+--------------------------------------
+
+La primera pregunta que surgió fue: "¿Por qué no conectamos simplemente Google NotebookLM a nuestra web?"
+
+NotebookLM es una herramienta fantástica para uso personal — permite subir documentos y hacerle preguntas de forma conversacional. Sin embargo, tiene una limitación fundamental: es una aplicación cerrada de Google, diseñada para ser usada directamente desde su interfaz web en notebooklm.google.com. Google no proporciona ninguna API pública ni forma oficial de conectar NotebookLM a una aplicación externa.
+
+Dicho de otro modo: NotebookLM es como un coche que solo puedes conducir tú mismo desde el asiento del conductor. No puedes darle las llaves a otra persona ni integrarlo en un sistema más grande. Para construir un asistente legal que vuestros empleados puedan usar desde vuestra propia web, necesitamos algo que sí tenga una API abierta y controlable.
+
+La buena noticia es que la tecnología que hay detrás de NotebookLM — el concepto de RAG — sí está disponible de forma profesional a través de los servicios de Google Cloud, que es exactamente lo que hemos implementado.
+
+
+QUÉ ES RAG (RETRIEVAL-AUGMENTED GENERATION)
+---------------------------------------------
+
+RAG son las siglas en inglés de "Generación Aumentada por Recuperación". Para entenderlo sin tecnicismos, imaginad que tenéis un asistente muy inteligente (la inteligencia artificial) pero que por defecto solo sabe lo que aprendió durante su formación general — no conoce vuestros contratos, vuestras leyes específicas ni vuestros documentos internos.
+
+RAG soluciona esto en dos pasos:
+
+1. RECUPERACIÓN: Cuando alguien hace una pregunta, el sistema primero busca en vuestra biblioteca de documentos los fragmentos más relevantes relacionados con esa pregunta. Es como si el asistente fuera a buscar los folios correctos en un archivador enorme antes de responder.
+
+2. GENERACIÓN: Con esos fragmentos relevantes en mano, el modelo de inteligencia artificial (en nuestro caso Gemini de Google) genera una respuesta coherente, citando de dónde viene la información.
+
+El resultado es un asistente que responde basándose exclusivamente en vuestros documentos reales, no en suposiciones o información genérica de internet. Si la respuesta no está en vuestros documentos, el sistema lo dice claramente.
+
+Para que la búsqueda de documentos sea rápida y precisa, los textos se convierten en representaciones matemáticas llamadas "embeddings" — básicamente números que capturan el significado semántico de cada fragmento. Cuando llega una pregunta, se calcula su embedding y se buscan los fragmentos matemáticamente más similares. Esto permite encontrar información relevante aunque la pregunta no use exactamente las mismas palabras que el documento.
+
+
+POR QUÉ USAMOS VERTEX AI RAG ENGINE
+-------------------------------------
+
+Google ofrece su tecnología RAG de forma profesional a través de Vertex AI RAG Engine, que es el servicio que hemos configurado para este proyecto. Elegimos esta solución por varias razones:
+
+ESCALA: El despacho tiene previsto cargar leyes, jurisprudencia, contratos y documentación legal que puede llegar a ser muy voluminosa. Vertex AI RAG Engine usa una base de datos vectorial gestionada por Google (basada en Cloud Spanner), diseñada para manejar millones de documentos sin degradación de rendimiento. Una solución casera con bases de datos simples habría llegado a sus límites con pocos miles de documentos.
+
+MULTILINGÜE: El modelo de embeddings configurado es "text-multilingual-embedding-002", específicamente diseñado para trabajar bien con múltiples idiomas incluyendo el español. Esto es importante para documentos legales en castellano.
+
+MANTENIMIENTO CERO: Google gestiona toda la infraestructura de indexación, actualización y búsqueda. Vosotros solo tenéis que subir documentos; el sistema se encarga del resto automáticamente.
+
+INTEGRACIÓN CON GEMINI: Al estar todo dentro del ecosistema de Google Cloud, la conexión entre el motor de búsqueda (RAG Engine) y el modelo de generación (Gemini) es nativa y optimizada.
+
+SEGURIDAD Y PRIVACIDAD: Los documentos se almacenan en vuestra propia cuenta de Google Cloud, no en servidores compartidos con terceros. Tenéis control total sobre quién accede a qué.
+
+COSTE RAZONABLE: Para el volumen estimado del despacho (aproximadamente 1GB de documentos y 50 consultas diarias), el coste es de unos 5-7 euros al mes, que escala de forma proporcional si el uso crece.
+
+
+CÓMO FUNCIONAN LAS FIREBASE FUNCTIONS (EL CEREBRO DEL SISTEMA)
+----------------------------------------------------------------
+
+Firebase Functions son pequeños programas que viven en los servidores de Google y se ejecutan solo cuando se les llama. No están encendidos continuamente esperando — se activan bajo demanda y se apagan solos cuando terminan. Esto los hace muy eficientes en coste.
+
+En nuestra aplicación tenemos cinco funciones principales:
+
+- processDocument: Se activa automáticamente cuando el administrador sube un archivo PDF o Word al almacenamiento. La función toma ese archivo y lo envía al RAG Engine de Vertex AI para que lo indexe. El administrador no tiene que hacer nada más — el proceso es automático.
+
+- addWebsite: Permite añadir el contenido de una página web a la base de conocimiento. La función descarga el texto de la web, lo guarda y lo envía al RAG Engine para indexarlo.
+
+- chat: Es la función principal que usan los empleados del despacho. Recibe la pregunta del usuario, le pide al RAG Engine que busque los fragmentos de documentos más relevantes, y luego le pasa esa información a Gemini para que genere una respuesta clara y bien redactada.
+
+- listDocuments: Devuelve la lista de todos los documentos que hay en la base de conocimiento, para que el administrador pueda verlos en el panel de gestión.
+
+- deleteDocument: Elimina un documento de la base de conocimiento cuando ya no es necesario.
+
+Estas funciones son la capa intermedia entre la interfaz web (lo que ve el usuario) y los servicios de Google Cloud (Vertex AI, almacenamiento, base de datos). Los usuarios nunca interactúan directamente con Vertex AI — siempre pasan por estas funciones, lo que permite controlar el acceso, registrar actividad y gestionar errores de forma centralizada.
+
+
+EL FRONTEND: SOLO UNA INTERFAZ
+--------------------------------
+
+Lo que el usuario ve en el navegador — el chat, el panel de administración — es simplemente una interfaz visual. Está construida en React (una tecnología web estándar) y alojada en Firebase Hosting, que es básicamente un servidor web muy rápido y fiable de Google.
+
+Es importante entender que el frontend no hace nada inteligente por sí mismo. Cuando un usuario escribe una pregunta y pulsa "Enviar", el frontend simplemente empaqueta esa pregunta y la manda a la función "chat" de Firebase. Espera la respuesta y la muestra en pantalla. Toda la inteligencia — la búsqueda de documentos, la generación de respuesta — ocurre en los servidores de Google, no en el navegador del usuario.
+
+Esto tiene varias ventajas prácticas:
+
+- Las claves de acceso a los servicios de Google nunca están expuestas en el navegador del usuario, lo que es fundamental para la seguridad.
+- El frontend puede ser tan ligero o tan elaborado visualmente como se quiera sin afectar al funcionamiento del sistema.
+- Se puede cambiar el diseño de la interfaz sin tocar nada de la lógica de negocio.
+- Si en el futuro se quiere una aplicación móvil, simplemente se crea una nueva interfaz que llama a las mismas funciones.
+
+La arquitectura completa es, por tanto: el usuario interactúa con la interfaz web (Frontend en Firebase Hosting), que llama a las funciones del servidor (Firebase Functions), que a su vez consultan la base de conocimiento (Vertex AI RAG Engine) y el modelo de lenguaje (Gemini), y devuelven la respuesta al usuario.
+
+Todo esto ocurre en menos de 5 segundos por consulta.
+
+
+RESUMEN
+--------
+
+NotebookLM no tiene API → no se puede integrar en una web propia.
+
+RAG es la tecnología que permite a la IA responder basándose en vuestros documentos reales.
+
+Vertex AI RAG Engine es la versión profesional y escalable de Google de esa tecnología, perfecta para un despacho con gran volumen documental.
+
+Firebase Functions son los programas intermedios que conectan la interfaz con los servicios de IA de forma segura y eficiente.
+
+El frontend es únicamente la capa visual — una ventana que llama a los servicios reales alojados en Google Cloud.

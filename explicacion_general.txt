@@ -1,0 +1,65 @@
+CONCEPTOS TÉCNICOS DEL ASISTENTE LEGAL
+=======================================
+
+EL FRONTEND Y LA NECESIDAD DE UN BACKEND
+------------------------------------------
+
+Una aplicación web se divide en dos capas con responsabilidades distintas.
+
+El frontend es la parte visible: la interfaz que el usuario ve y con la que interactúa en el navegador. Está construido con tecnologías web estándar y su función es exclusivamente presentar información y recoger acciones del usuario. El frontend no contiene lógica de negocio ni tiene acceso directo a servicios externos como bases de datos o sistemas de inteligencia artificial. Esto no es una limitación, sino un principio de diseño deliberado: exponer credenciales o lógica sensible en el navegador del usuario sería un riesgo de seguridad inaceptable.
+
+Para que una aplicación web pueda conectarse a servicios externos de forma segura, es necesario un backend: un conjunto de programas que se ejecutan en servidores controlados, fuera del alcance del usuario. El backend actúa como intermediario entre la interfaz y los servicios subyacentes. Centraliza el control de acceso, gestiona la autenticación, registra la actividad y garantiza que ninguna credencial sensible quede expuesta al cliente.
+
+Firebase Functions es la solución de backend sin servidor de Google. Son unidades de código que se ejecutan en los servidores de Google únicamente cuando son invocadas, sin estar activas de forma permanente. Este modelo, denominado serverless o sin servidor, elimina la necesidad de administrar infraestructura propia y reduce el coste al facturar exclusivamente por uso real. Cada función realiza una tarea específica: recibir una pregunta, procesar un documento, consultar un servicio de inteligencia artificial, y devolver el resultado al frontend.
+
+Esta separación entre frontend y backend tiene consecuencias prácticas relevantes: las credenciales de acceso a servicios de terceros nunca están expuestas en el navegador, la lógica de negocio puede modificarse sin afectar a la interfaz, y nuevas interfaces (aplicaciones móviles, integraciones externas) pueden construirse consumiendo las mismas funciones de backend sin duplicar código.
+
+
+POR QUÉ NOTEBOOK LM NO ES UNA SOLUCIÓN INTEGRABLE
+---------------------------------------------------
+
+Google NotebookLM es una herramienta de productividad personal que permite subir documentos y realizar preguntas sobre su contenido de forma conversacional. Sin embargo, está diseñada exclusivamente para uso directo desde su interfaz web en notebooklm.google.com.
+
+Google no proporciona ninguna API pública ni mecanismo oficial que permita conectar NotebookLM a una aplicación externa. Esto significa que no existe forma técnica de integrarlo en una web propia, una aplicación móvil o cualquier otro sistema de terceros. Es una aplicación cerrada, pensada para el uso individual, no para ser componente de un producto mayor.
+
+Para construir un asistente que opere dentro de una plataforma propia, con control sobre el acceso, la seguridad y la experiencia de usuario, es necesario recurrir a servicios que sí expongan una API. La tecnología subyacente a NotebookLM — el modelo RAG — está disponible de forma profesional a través de Google Cloud.
+
+
+QUÉ ES RAG
+-----------
+
+RAG son las siglas de Retrieval-Augmented Generation, en español Generación Aumentada por Recuperación. Es una técnica de inteligencia artificial que combina dos capacidades distintas: la búsqueda de información en una base documental y la generación de texto mediante un modelo de lenguaje.
+
+El proceso funciona en dos fases:
+
+La primera fase es la recuperación. Ante una consulta, el sistema busca en la biblioteca de documentos los fragmentos más relevantes relacionados con esa pregunta. Esta búsqueda no es textual sino semántica: los documentos se convierten previamente en representaciones matemáticas llamadas embeddings, que capturan el significado de cada fragmento. Cuando llega una pregunta, se calcula su propio embedding y se identifican los fragmentos cuyo significado es matemáticamente más cercano, independientemente de si las palabras exactas coinciden o no.
+
+La segunda fase es la generación. Los fragmentos recuperados se entregan al modelo de lenguaje como contexto. El modelo genera una respuesta coherente y bien redactada basándose exclusivamente en esa información, citando las fuentes de origen.
+
+El resultado es un sistema que responde únicamente a partir de los documentos que se le han proporcionado, sin inventar información ni recurrir a conocimiento genérico externo. Si la respuesta no se encuentra en la base documental, el sistema lo indica explícitamente.
+
+
+POR QUÉ VERTEX AI RAG ENGINE
+------------------------------
+
+Google ofrece su implementación profesional de RAG a través de Vertex AI RAG Engine. Esta solución es la adecuada para un entorno de producción con las siguientes características:
+
+Capacidad de escala. El motor utiliza una base de datos vectorial gestionada por Google, construida sobre Cloud Spanner, que está diseñada para almacenar y consultar millones de fragmentos de documentos con tiempos de respuesta bajos y consistentes. Una implementación personalizada sobre bases de datos convencionales tendría limitaciones de rendimiento a medida que crece el volumen documental.
+
+Soporte multilingüe. El modelo de embeddings text-multilingual-embedding-002 está entrenado específicamente para trabajar con múltiples idiomas incluyendo el español, lo que garantiza una búsqueda semántica precisa en documentación en castellano.
+
+Infraestructura gestionada. Google se encarga del mantenimiento, la actualización y la disponibilidad del servicio. No requiere administración de servidores ni gestión de índices.
+
+Integración nativa con Gemini. Al pertenecer al mismo ecosistema, la comunicación entre el motor de recuperación y el modelo de generación Gemini es directa y optimizada, sin capas de integración adicionales.
+
+Control de datos. Los documentos se almacenan en la cuenta de Google Cloud del cliente, no en infraestructura compartida con terceros. El acceso está controlado mediante las políticas de identidad y permisos de Google Cloud.
+
+Coste proporcional al uso. El servicio factura en función del uso real: volumen de documentos almacenados, número de consultas realizadas y tokens de generación consumidos. Para un uso moderado, los costes son reducidos y escalan de forma predecible.
+
+
+VISIÓN GENERAL DE LA ARQUITECTURA
+-----------------------------------
+
+El flujo completo de una consulta es el siguiente: el usuario escribe una pregunta en la interfaz web, el frontend la envía a una función de backend, la función consulta el RAG Engine de Vertex AI que recupera los fragmentos documentales relevantes, esos fragmentos se pasan a Gemini que genera la respuesta, y la respuesta vuelve al frontend para ser mostrada al usuario. Todo el proceso ocurre en los servidores de Google Cloud, de forma segura y sin exponer datos sensibles en ningún punto intermedio.
+
+El flujo de ingesta de documentos es igualmente transparente: el administrador sube un archivo desde el panel web, Firebase Storage lo almacena en Google Cloud, una función de backend se activa automáticamente, y el documento queda indexado en el RAG Engine y disponible para consultas en cuestión de segundos.
