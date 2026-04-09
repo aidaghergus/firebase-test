@@ -21,6 +21,6 @@ export function AdminRoute({ children }) {
   if (loading) return <LoadingScreen />
   if (!user) return <Navigate to="/login" replace />
   console.log(role)
-  if (role !== 'admin') return <Navigate to="/" replace />
+  if (role !== 'admin') return <Navigate to="/app" replace />
   return children
 }

@@ -20,7 +20,15 @@ export const db = getFirestore(app)
 export const auth = getAuth(app)
 export const googleProvider = new GoogleAuthProvider()
 
+// Global knowledge base
 export const chatFn = httpsCallable(functions, 'chat')
 export const listDocumentsFn = httpsCallable(functions, 'listDocuments')
 export const deleteDocumentFn = httpsCallable(functions, 'deleteDocument')
 export const addWebsiteFn = httpsCallable(functions, 'addWebsite')
+
+// Personal cases
+export const createCaseFn = httpsCallable(functions, 'createCase')
+export const deleteCaseFn = httpsCallable(functions, 'deleteCase')
+export const listCasesFn = httpsCallable(functions, 'listCases')
+export const listCaseDocumentsFn = httpsCallable(functions, 'listCaseDocuments')
+export const deleteCaseDocumentFn = httpsCallable(functions, 'deleteCaseDocument')

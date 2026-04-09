@@ -1,0 +1,526 @@
+export const LANGUAGES = [
+  { code: 'en', label: 'English (EN)' },
+  { code: 'es', label: 'Español (ES)' },
+  { code: 'fr', label: 'Français (FR)' },
+  { code: 'de', label: 'Deutsch (DE)' },
+  { code: 'it', label: 'Italiano (IT)' },
+  { code: 'pt', label: 'Português (PT)' },
+  { code: 'nl', label: 'Nederlands (NL)' },
+  { code: 'ru', label: 'Русский (RU)' },
+  { code: 'ar', label: 'العربية (AR)' },
+  { code: 'zh', label: '中文 (ZH)' },
+]
+
+export const RTL_LANGS = ['ar']
+
+export const translations = {
+  en: {
+    nav: {
+      practiceAreas: 'Practice Areas',
+      caseLaw: 'Case Law',
+      resources: 'Resources',
+      publications: 'Publications',
+    },
+    auth: {
+      signIn: 'Sign in',
+      join: 'Join',
+      enterPortal: 'Enter Portal',
+      signOut: 'Sign out',
+    },
+    hero: {
+      tagline: 'Est. MMXXIV • Digital Jurisprudence',
+      headline: ['The code of law,', 'perfected by logic.'],
+      quote: '"Jurisprudence is the knowledge of things divine and human, the science of the just and the unjust."',
+      cta: 'Enter the Portal',
+    },
+    featured: {
+      heading: 'Advancing the Legal Frontier',
+      body: 'In an era defined by rapid technological acceleration, the foundations of law require a new architectural integrity. Pericles provides the synthesis of centuries of legal tradition with the precision of contemporary algorithmic intelligence.',
+      link: 'Review the Constitution',
+      pullquote: '"The law is not a static monument, but a living dialogue between equity and order."',
+    },
+    agents: {
+      heading: 'Our Specialized Agents',
+      subheading: '15 digital agents experts in different areas of Spanish law',
+      chatWith: 'Chat with {name}',
+    },
+    briefings: {
+      heading: 'Latest Briefings',
+      body: 'A curated selection of legal insights and algorithmic analysis from our senior jurists and data scientists.',
+      viewAll: 'View All Publications',
+    },
+    cta: {
+      heading: 'Request a Consultative Briefing',
+      body: 'Available exclusively for institutional partners and private offices.',
+      placeholder: 'Institutional Email',
+      submit: 'Submit Inquiry',
+    },
+    footer: {
+      brand: 'Pericles Digital Jurist',
+      disclosures: 'Legal Disclosures',
+      privacy: 'Privacy Policy',
+      terms: 'Terms of Service',
+      contact: 'Contact Office',
+      copyright: '© 2024 Pericles Digital Jurist. All rights reserved. Attorney Advertising.',
+    },
+  },
+
+  es: {
+    nav: {
+      practiceAreas: 'Áreas de Práctica',
+      caseLaw: 'Jurisprudencia',
+      resources: 'Recursos',
+      publications: 'Publicaciones',
+    },
+    auth: {
+      signIn: 'Iniciar sesión',
+      join: 'Unirse',
+      enterPortal: 'Entrar al Portal',
+      signOut: 'Cerrar sesión',
+    },
+    hero: {
+      tagline: 'Est. MMXXIV • Jurisprudencia Digital',
+      headline: ['El código del derecho,', 'perfeccionado por la lógica.'],
+      quote: '"La jurisprudencia es el conocimiento de las cosas divinas y humanas, la ciencia de lo justo y lo injusto."',
+      cta: 'Entrar al Portal',
+    },
+    featured: {
+      heading: 'Avanzando la Frontera Legal',
+      body: 'En una era definida por la aceleración tecnológica, los fundamentos del derecho requieren una nueva integridad arquitectónica. Pericles ofrece la síntesis de siglos de tradición jurídica con la precisión de la inteligencia algorítmica contemporánea.',
+      link: 'Revisar la Constitución',
+      pullquote: '"La ley no es un monumento estático, sino un diálogo vivo entre la equidad y el orden."',
+    },
+    agents: {
+      heading: 'Nuestros Agentes Especializados',
+      subheading: '15 agentes digitales expertos en diferentes áreas del derecho español',
+      chatWith: 'Chatear con {name}',
+    },
+    briefings: {
+      heading: 'Últimos Informes',
+      body: 'Una selección curada de análisis jurídicos y algorítmicos de nuestros jurisperitos y científicos de datos.',
+      viewAll: 'Ver Todas las Publicaciones',
+    },
+    cta: {
+      heading: 'Solicitar un Informe Consultivo',
+      body: 'Disponible exclusivamente para socios institucionales y despachos privados.',
+      placeholder: 'Correo Institucional',
+      submit: 'Enviar Consulta',
+    },
+    footer: {
+      brand: 'Pericles Jurista Digital',
+      disclosures: 'Avisos Legales',
+      privacy: 'Política de Privacidad',
+      terms: 'Términos de Servicio',
+      contact: 'Contacto',
+      copyright: '© 2024 Pericles Jurista Digital. Todos los derechos reservados. Publicidad de Abogados.',
+    },
+  },
+
+  fr: {
+    nav: {
+      practiceAreas: 'Domaines de Pratique',
+      caseLaw: 'Jurisprudence',
+      resources: 'Ressources',
+      publications: 'Publications',
+    },
+    auth: {
+      signIn: 'Se connecter',
+      join: 'Rejoindre',
+      enterPortal: 'Accéder au Portail',
+      signOut: 'Se déconnecter',
+    },
+    hero: {
+      tagline: 'Est. MMXXIV • Jurisprudence Numérique',
+      headline: ['Le code du droit,', 'perfectionné par la logique.'],
+      quote: '"La jurisprudence est la connaissance des choses divines et humaines, la science du juste et de l\'injuste."',
+      cta: 'Accéder au Portail',
+    },
+    featured: {
+      heading: 'Faire Avancer la Frontière Juridique',
+      body: 'Dans une ère définie par l\'accélération technologique rapide, les fondements du droit requièrent une nouvelle intégrité architecturale. Pericles offre la synthèse de siècles de tradition juridique avec la précision de l\'intelligence algorithmique contemporaine.',
+      link: 'Examiner la Constitution',
+      pullquote: '"La loi n\'est pas un monument statique, mais un dialogue vivant entre l\'équité et l\'ordre."',
+    },
+    agents: {
+      heading: 'Nos Agents Spécialisés',
+      subheading: '15 agents numériques experts dans différents domaines du droit espagnol',
+      chatWith: 'Discuter avec {name}',
+    },
+    briefings: {
+      heading: 'Dernières Analyses',
+      body: 'Une sélection triée d\'analyses juridiques et algorithmiques de nos juristes seniors et data scientists.',
+      viewAll: 'Voir Toutes les Publications',
+    },
+    cta: {
+      heading: 'Demander une Consultation',
+      body: 'Disponible exclusivement pour les partenaires institutionnels et les cabinets privés.',
+      placeholder: 'Email Institutionnel',
+      submit: 'Soumettre la Demande',
+    },
+    footer: {
+      brand: 'Pericles Juriste Numérique',
+      disclosures: 'Mentions Légales',
+      privacy: 'Politique de Confidentialité',
+      terms: 'Conditions d\'Utilisation',
+      contact: 'Bureau de Contact',
+      copyright: '© 2024 Pericles Juriste Numérique. Tous droits réservés. Publicité d\'Avocat.',
+    },
+  },
+
+  de: {
+    nav: {
+      practiceAreas: 'Tätigkeitsbereiche',
+      caseLaw: 'Rechtsprechung',
+      resources: 'Ressourcen',
+      publications: 'Publikationen',
+    },
+    auth: {
+      signIn: 'Anmelden',
+      join: 'Beitreten',
+      enterPortal: 'Portal betreten',
+      signOut: 'Abmelden',
+    },
+    hero: {
+      tagline: 'Est. MMXXIV • Digitale Jurisprudenz',
+      headline: ['Der Code des Rechts,', 'perfektioniert durch Logik.'],
+      quote: '"Jurisprudenz ist das Wissen der göttlichen und menschlichen Dinge, die Wissenschaft des Gerechten und Ungerechten."',
+      cta: 'Portal betreten',
+    },
+    featured: {
+      heading: 'Die Rechtliche Grenze Voranbringen',
+      body: 'In einer Zeit rasanter technologischer Beschleunigung benötigen die Grundlagen des Rechts eine neue architektonische Integrität. Pericles bietet die Synthese aus Jahrhunderten juristischer Tradition mit der Präzision zeitgenössischer algorithmischer Intelligenz.',
+      link: 'Verfassung überprüfen',
+      pullquote: '"Das Recht ist kein statisches Monument, sondern ein lebendiger Dialog zwischen Billigkeit und Ordnung."',
+    },
+    agents: {
+      heading: 'Unsere Spezialisierten Agenten',
+      subheading: '15 digitale Agenten, Experten in verschiedenen Bereichen des spanischen Rechts',
+      chatWith: 'Chatten mit {name}',
+    },
+    briefings: {
+      heading: 'Neueste Berichte',
+      body: 'Eine kuratierte Auswahl rechtlicher und algorithmischer Analysen unserer leitenden Juristen und Datenwissenschaftler.',
+      viewAll: 'Alle Publikationen anzeigen',
+    },
+    cta: {
+      heading: 'Beratungsgespräch Anfordern',
+      body: 'Exklusiv verfügbar für institutionelle Partner und private Kanzleien.',
+      placeholder: 'Institutionelle E-Mail',
+      submit: 'Anfrage senden',
+    },
+    footer: {
+      brand: 'Pericles Digitaler Jurist',
+      disclosures: 'Rechtliche Hinweise',
+      privacy: 'Datenschutzrichtlinie',
+      terms: 'Nutzungsbedingungen',
+      contact: 'Kontakt',
+      copyright: '© 2024 Pericles Digitaler Jurist. Alle Rechte vorbehalten. Anwaltswerbung.',
+    },
+  },
+
+  it: {
+    nav: {
+      practiceAreas: 'Aree di Pratica',
+      caseLaw: 'Giurisprudenza',
+      resources: 'Risorse',
+      publications: 'Pubblicazioni',
+    },
+    auth: {
+      signIn: 'Accedi',
+      join: 'Iscriviti',
+      enterPortal: 'Entra nel Portale',
+      signOut: 'Esci',
+    },
+    hero: {
+      tagline: 'Est. MMXXIV • Giurisprudenza Digitale',
+      headline: ['Il codice del diritto,', 'perfezionato dalla logica.'],
+      quote: '"La giurisprudenza è la conoscenza delle cose divine e umane, la scienza del giusto e dell\'ingiusto."',
+      cta: 'Entra nel Portale',
+    },
+    featured: {
+      heading: 'Avanzare la Frontiera Legale',
+      body: 'In un\'era definita dalla rapida accelerazione tecnologica, le fondamenta del diritto richiedono una nuova integrità architettonica. Pericles offre la sintesi di secoli di tradizione giuridica con la precisione dell\'intelligenza algoritmica contemporanea.',
+      link: 'Esaminare la Costituzione',
+      pullquote: '"La legge non è un monumento statico, ma un dialogo vivente tra equità e ordine."',
+    },
+    agents: {
+      heading: 'I Nostri Agenti Specializzati',
+      subheading: '15 agenti digitali esperti in diverse aree del diritto spagnolo',
+      chatWith: 'Chatta con {name}',
+    },
+    briefings: {
+      heading: 'Ultime Analisi',
+      body: 'Una selezione curata di analisi giuridiche e algoritmiche dei nostri giuristi senior e data scientist.',
+      viewAll: 'Visualizza Tutte le Pubblicazioni',
+    },
+    cta: {
+      heading: 'Richiedere una Consulenza',
+      body: 'Disponibile esclusivamente per partner istituzionali e studi privati.',
+      placeholder: 'Email Istituzionale',
+      submit: 'Invia Richiesta',
+    },
+    footer: {
+      brand: 'Pericles Giurista Digitale',
+      disclosures: 'Informative Legali',
+      privacy: 'Informativa sulla Privacy',
+      terms: 'Termini di Servizio',
+      contact: 'Ufficio Contatti',
+      copyright: '© 2024 Pericles Giurista Digitale. Tutti i diritti riservati. Pubblicità Legale.',
+    },
+  },
+
+  pt: {
+    nav: {
+      practiceAreas: 'Áreas de Prática',
+      caseLaw: 'Jurisprudência',
+      resources: 'Recursos',
+      publications: 'Publicações',
+    },
+    auth: {
+      signIn: 'Entrar',
+      join: 'Registar',
+      enterPortal: 'Entrar no Portal',
+      signOut: 'Sair',
+    },
+    hero: {
+      tagline: 'Est. MMXXIV • Jurisprudência Digital',
+      headline: ['O código do direito,', 'aperfeiçoado pela lógica.'],
+      quote: '"A jurisprudência é o conhecimento das coisas divinas e humanas, a ciência do justo e do injusto."',
+      cta: 'Entrar no Portal',
+    },
+    featured: {
+      heading: 'Avançando a Fronteira Legal',
+      body: 'Numa era definida pela aceleração tecnológica rápida, os fundamentos do direito requerem uma nova integridade arquitetónica. O Pericles oferece a síntese de séculos de tradição jurídica com a precisão da inteligência algorítmica contemporânea.',
+      link: 'Rever a Constituição',
+      pullquote: '"A lei não é um monumento estático, mas um diálogo vivo entre equidade e ordem."',
+    },
+    agents: {
+      heading: 'Os Nossos Agentes Especializados',
+      subheading: '15 agentes digitais especialistas em diferentes áreas do direito espanhol',
+      chatWith: 'Conversar com {name}',
+    },
+    briefings: {
+      heading: 'Últimas Análises',
+      body: 'Uma seleção curada de análises jurídicas e algorítmicas dos nossos juristas seniores e cientistas de dados.',
+      viewAll: 'Ver Todas as Publicações',
+    },
+    cta: {
+      heading: 'Solicitar uma Consulta',
+      body: 'Disponível exclusivamente para parceiros institucionais e escritórios privados.',
+      placeholder: 'Email Institucional',
+      submit: 'Enviar Pedido',
+    },
+    footer: {
+      brand: 'Pericles Jurista Digital',
+      disclosures: 'Divulgações Legais',
+      privacy: 'Política de Privacidade',
+      terms: 'Termos de Serviço',
+      contact: 'Escritório de Contacto',
+      copyright: '© 2024 Pericles Jurista Digital. Todos os direitos reservados. Publicidade de Advogado.',
+    },
+  },
+
+  nl: {
+    nav: {
+      practiceAreas: 'Praktijkgebieden',
+      caseLaw: 'Jurisprudentie',
+      resources: 'Bronnen',
+      publications: 'Publicaties',
+    },
+    auth: {
+      signIn: 'Inloggen',
+      join: 'Registreren',
+      enterPortal: 'Portaal betreden',
+      signOut: 'Uitloggen',
+    },
+    hero: {
+      tagline: 'Est. MMXXIV • Digitale Jurisprudentie',
+      headline: ['De code van het recht,', 'geperfectioneerd door logica.'],
+      quote: '"Jurisprudentie is de kennis van goddelijke en menselijke zaken, de wetenschap van het rechtvaardige en onrechtvaardige."',
+      cta: 'Portaal betreden',
+    },
+    featured: {
+      heading: 'De Juridische Grens Verleggen',
+      body: 'In een tijdperk gekenmerkt door snelle technologische versnelling vereisen de grondslagen van het recht een nieuwe architectonische integriteit. Pericles biedt de synthese van eeuwen juridische traditie met de precisie van hedendaagse algoritmische intelligentie.',
+      link: 'Grondwet bekijken',
+      pullquote: '"Het recht is geen statisch monument, maar een levende dialoog tussen billijkheid en orde."',
+    },
+    agents: {
+      heading: 'Onze Gespecialiseerde Agenten',
+      subheading: '15 digitale agenten, experts op verschillende gebieden van het Spaanse recht',
+      chatWith: 'Chatten met {name}',
+    },
+    briefings: {
+      heading: 'Laatste Analyses',
+      body: 'Een samengestelde selectie van juridische en algoritmische analyses van onze senior-juristen en datawetenschappers.',
+      viewAll: 'Alle Publicaties bekijken',
+    },
+    cta: {
+      heading: 'Adviesgesprek Aanvragen',
+      body: 'Uitsluitend beschikbaar voor institutionele partners en privékantoren.',
+      placeholder: 'Institutioneel e-mailadres',
+      submit: 'Aanvraag indienen',
+    },
+    footer: {
+      brand: 'Pericles Digitale Jurist',
+      disclosures: 'Juridische Mededelingen',
+      privacy: 'Privacybeleid',
+      terms: 'Servicevoorwaarden',
+      contact: 'Kantoor Contact',
+      copyright: '© 2024 Pericles Digitale Jurist. Alle rechten voorbehouden. Advocatenreclame.',
+    },
+  },
+
+  ru: {
+    nav: {
+      practiceAreas: 'Области практики',
+      caseLaw: 'Судебная практика',
+      resources: 'Ресурсы',
+      publications: 'Публикации',
+    },
+    auth: {
+      signIn: 'Войти',
+      join: 'Присоединиться',
+      enterPortal: 'Войти на портал',
+      signOut: 'Выйти',
+    },
+    hero: {
+      tagline: 'Осн. MMXXIV • Цифровая юриспруденция',
+      headline: ['Кодекс закона,', 'совершённый логикой.'],
+      quote: '"Юриспруденция — это знание вещей божественных и человеческих, наука о справедливом и несправедливом."',
+      cta: 'Войти на портал',
+    },
+    featured: {
+      heading: 'Продвижение правовых рубежей',
+      body: 'В эпоху стремительного технологического ускорения основы права требуют новой архитектурной целостности. Pericles обеспечивает синтез вековых правовых традиций с точностью современного алгоритмического интеллекта.',
+      link: 'Изучить Конституцию',
+      pullquote: '"Закон — не статичный монумент, а живой диалог между справедливостью и порядком."',
+    },
+    agents: {
+      heading: 'Наши специализированные агенты',
+      subheading: '15 цифровых агентов — экспертов в различных областях испанского права',
+      chatWith: 'Написать {name}',
+    },
+    briefings: {
+      heading: 'Последние аналитические материалы',
+      body: 'Тщательно отобранные правовые и алгоритмические анализы от наших старших юристов и учёных в области данных.',
+      viewAll: 'Просмотреть все публикации',
+    },
+    cta: {
+      heading: 'Запросить консультацию',
+      body: 'Доступно исключительно для институциональных партнёров и частных офисов.',
+      placeholder: 'Корпоративный email',
+      submit: 'Отправить запрос',
+    },
+    footer: {
+      brand: 'Pericles — Цифровой юрист',
+      disclosures: 'Правовые уведомления',
+      privacy: 'Политика конфиденциальности',
+      terms: 'Условия использования',
+      contact: 'Контакты',
+      copyright: '© 2024 Pericles. Все права защищены. Реклама юридических услуг.',
+    },
+  },
+
+  ar: {
+    nav: {
+      practiceAreas: 'مجالات الممارسة',
+      caseLaw: 'السوابق القضائية',
+      resources: 'الموارد',
+      publications: 'المنشورات',
+    },
+    auth: {
+      signIn: 'تسجيل الدخول',
+      join: 'انضم',
+      enterPortal: 'الدخول إلى البوابة',
+      signOut: 'تسجيل الخروج',
+    },
+    hero: {
+      tagline: 'تأسست MMXXIV • الفقه الرقمي',
+      headline: ['قانون العدالة،', 'مُكتمَل بالمنطق.'],
+      quote: '"الفقه هو معرفة الأشياء الإلهية والإنسانية، وعلم العادل وغير العادل."',
+      cta: 'الدخول إلى البوابة',
+    },
+    featured: {
+      heading: 'تقدُّم الحدود القانونية',
+      body: 'في عصر يتسم بالتسارع التكنولوجي السريع، تستدعي أسس القانون نزاهةً معمارية جديدة. يوفر Pericles التوليف بين قرون من التقاليد القانونية وبين دقة الذكاء الخوارزمي المعاصر.',
+      link: 'مراجعة الدستور',
+      pullquote: '"القانون ليس نصبًا تذكاريًا ثابتًا، بل هو حوار حيّ بين المساواة والنظام."',
+    },
+    agents: {
+      heading: 'وكلاؤنا المتخصصون',
+      subheading: '١٥ وكيلًا رقميًا خبراء في مجالات مختلفة من القانون الإسباني',
+      chatWith: 'محادثة مع {name}',
+    },
+    briefings: {
+      heading: 'آخر التقارير',
+      body: 'مجموعة مختارة من التحليلات القانونية والخوارزمية من كبار فقهائنا وعلماء البيانات.',
+      viewAll: 'عرض جميع المنشورات',
+    },
+    cta: {
+      heading: 'طلب استشارة',
+      body: 'متاح حصريًا للشركاء المؤسسيين والمكاتب الخاصة.',
+      placeholder: 'البريد الإلكتروني المؤسسي',
+      submit: 'إرسال الاستفسار',
+    },
+    footer: {
+      brand: 'Pericles — المحامي الرقمي',
+      disclosures: 'الإفصاحات القانونية',
+      privacy: 'سياسة الخصوصية',
+      terms: 'شروط الخدمة',
+      contact: 'مكتب الاتصال',
+      copyright: '© ٢٠٢٤ Pericles. جميع الحقوق محفوظة. إعلان محاماة.',
+    },
+  },
+
+  zh: {
+    nav: {
+      practiceAreas: '业务领域',
+      caseLaw: '案例法',
+      resources: '资源',
+      publications: '出版物',
+    },
+    auth: {
+      signIn: '登录',
+      join: '注册',
+      enterPortal: '进入门户',
+      signOut: '退出',
+    },
+    hero: {
+      tagline: '成立于 MMXXIV • 数字法学',
+      headline: ['法律之道，', '以逻辑臻于完善。'],
+      quote: '"法学是对神圣与人类事务的认知，是对公正与非公正的科学。"',
+      cta: '进入门户',
+    },
+    featured: {
+      heading: '拓展法律前沿',
+      body: '在技术飞速发展的时代，法律的基础需要新的架构完整性。Pericles 将数百年的法律传统与当代算法智能的精准性相融合，为您提供卓越服务。',
+      link: '查阅宪法',
+      pullquote: '"法律不是静止的纪念碑，而是公平与秩序之间鲜活的对话。"',
+    },
+    agents: {
+      heading: '我们的专业智能助手',
+      subheading: '15位数字助手，精通西班牙法律各领域',
+      chatWith: '与{name}对话',
+    },
+    briefings: {
+      heading: '最新简报',
+      body: '来自我们资深法学家和数据科学家精心策划的法律见解与算法分析。',
+      viewAll: '查看所有出版物',
+    },
+    cta: {
+      heading: '申请咨询简报',
+      body: '仅对机构合作伙伴和私人律所开放。',
+      placeholder: '机构邮箱',
+      submit: '提交询问',
+    },
+    footer: {
+      brand: 'Pericles 数字法学家',
+      disclosures: '法律披露',
+      privacy: '隐私政策',
+      terms: '服务条款',
+      contact: '联系我们',
+      copyright: '© 2024 Pericles 数字法学家。保留所有权利。律师广告。',
+    },
+  },
+}

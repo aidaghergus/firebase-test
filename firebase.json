@@ -13,9 +13,12 @@
       }
     ]
   },
-  "storage": {
-    "rules": "storage.rules"
-  },
+  "storage": [
+    {
+      "bucket": "test-project-2026-490815.firebasestorage.app",
+      "rules": "storage.rules"
+    }
+  ],
   "functions": [
     {
       "source": "functions",

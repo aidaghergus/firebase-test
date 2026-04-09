@@ -31,12 +31,17 @@ export interface QueryResult {
 
 export async function ragQuery(
   question: string,
-  history: ChatMessage[] = []
+  history: ChatMessage[] = [],
+  caseContext?: string
 ): Promise<QueryResult> {
+  const systemInstruction = caseContext
+    ? `${SYSTEM_PROMPT}\n\n## User's Personal Case Documents\nUse these documents in addition to the knowledge base when answering:\n\n${caseContext}`
+    : SYSTEM_PROMPT;
+
   const chat = ai.chats.create({
     model: "gemini-2.5-flash",
     config: {
-      systemInstruction: SYSTEM_PROMPT,
+      systemInstruction,
       tools: [
         {
           retrieval: {
@@ -56,10 +61,7 @@ export async function ragQuery(
 
   const response = await chat.sendMessage({ message: question });
   const answer = response.text ?? "";
-
-  // Extract sources from grounding metadata
   const sources = extractSources(response);
-
   return { answer, sources };
 }
 
@@ -67,7 +69,6 @@ export async function ragQuery(
 function extractSources(response: any): Array<{ name: string; excerpt: string }> {
   const sources: Array<{ name: string; excerpt: string }> = [];
   const chunks = response.candidates?.[0]?.groundingMetadata?.groundingChunks ?? [];
-
   for (const chunk of chunks) {
     const ctx = chunk.retrievedContext;
     if (!ctx) continue;
@@ -79,6 +80,5 @@ function extractSources(response: any): Array<{ name: string; excerpt: string }>
       });
     }
   }
-
   return sources;
 }

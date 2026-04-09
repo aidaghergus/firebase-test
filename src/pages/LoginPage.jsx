@@ -20,7 +20,7 @@ export default function LoginPage() {
     )
   }
 
-  if (user) return <Navigate to="/" replace />
+  if (user) return <Navigate to="/app" replace />
 
   async function handleGoogleSignIn() {
     setError(null)

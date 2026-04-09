@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { ref, uploadBytesResumable } from 'firebase/storage'
 import { signOut } from 'firebase/auth'
 import { storage, auth, listDocumentsFn, deleteDocumentFn } from '../firebase.js'
 import { useAuth } from '../hooks/useAuth.js'
+import PortalNavbar from '../components/PortalNavbar.jsx'
 
 function DocumentRow({ doc, onDelete }) {
   const [deleting, setDeleting] = useState(false)
@@ -126,26 +128,7 @@ export default function AdminPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <header className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
-        <div className="max-w-3xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-lg font-headline font-bold text-on-background">Document Vault</h1>
-            <p className="text-xs text-outline">Admin — manage the knowledge base</p>
-          </div>
-          <div className="flex items-center gap-4">
-            <span className="text-sm text-gray-600">{user?.displayName || user?.email}</span>
-            <a href="/" className="text-sm text-blue-600 hover:underline">
-              Go to Chat
-            </a>
-            <button
-              onClick={() => signOut(auth)}
-              className="text-sm text-gray-500 hover:text-gray-700"
-            >
-              Sign out
-            </button>
-          </div>
-        </div>
-      </header>
+      <PortalNavbar active="admin" />
 
       <main className="max-w-3xl mx-auto px-4 py-8 space-y-6">
         {/* Status banner */}

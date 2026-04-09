@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react'
+import { Link } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { chatFn, auth } from '../firebase.js'
 import { useAuth } from '../hooks/useAuth.js'
+import PortalNavbar from '../components/PortalNavbar.jsx'
 
 function SourceBadge({ source }) {
   const [expanded, setExpanded] = useState(false)
@@ -54,11 +56,11 @@ function Message({ msg }) {
 }
 
 export default function ChatPage() {
-  const { user } = useAuth()
+  const { user, role } = useAuth()
   const [messages, setMessages] = useState([
     {
       role: 'model',
-      content: 'Good day, Counsel. I am Pericles, your legal assistant. I can answer questions based on the documents available in the knowledge base. How can I help you?',
+      content: 'Good day! I am Pericles, your legal assistant. I can answer questions based on the documents available in the knowledge base. How can I help you?',
     },
   ])
   const [input, setInput] = useState('')
@@ -101,24 +103,35 @@ export default function ChatPage() {
 
       {/* Left Sidebar */}
       <aside className="hidden md:flex flex-col h-full border-r border-surface-container-high bg-surface-container-low w-72 text-sm">
-        <div className="p-8">
-          <h2 className="font-headline font-bold text-on-background text-xl">Pericles</h2>
+        <div className="p-6">
+          <div className="flex items-center gap-2 mb-1">
+            <img src="https://i.imgur.com/5Sgvd5n.png" alt="Pericles" className="h-9" loading="lazy" onError={(e) => e.target.style.display = 'none'} />
+            <span className="font-headline font-bold text-on-background text-xl">Pericles</span>
+          </div>
           <p className="text-xs text-outline mt-1">Legal Assistant</p>
         </div>
         <nav className="flex-1 px-0">
           <ul className="space-y-1">
             <li>
-              <a className="bg-white text-on-background rounded-r-full py-3 px-6 shadow-sm font-semibold flex items-center gap-3 hover:translate-x-1 transition-transform" href="#">
+              <Link to="/app" className="bg-white text-on-background rounded-r-full py-3 px-6 shadow-sm font-semibold flex items-center gap-3 hover:translate-x-1 transition-transform">
                 <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>smart_toy</span>
                 Legal Assistant
-              </a>
+              </Link>
             </li>
             <li>
-              <a href="/admin" className="text-outline px-6 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors hover:translate-x-1 hover:text-on-background">
+              <Link to="/cases" className="text-outline px-6 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors hover:translate-x-1 hover:text-on-background">
+                <span className="material-symbols-outlined">folder_open</span>
+                My Cases
+              </Link>
+            </li>
+            {role === 'admin' && (
+            <li>
+              <Link to="/admin" className="text-outline px-6 py-3 flex items-center gap-3 hover:bg-surface-container-high transition-colors hover:translate-x-1 hover:text-on-background">
                 <span className="material-symbols-outlined">folder_managed</span>
                 Document Vault
-              </a>
+              </Link>
             </li>
+            )}
           </ul>
         </nav>
         <div className="mt-auto p-4 flex flex-col gap-1 border-t border-surface-container-high">
@@ -139,25 +152,7 @@ export default function ChatPage() {
       {/* Main */}
       <main className="flex-1 flex flex-col bg-white overflow-hidden">
 
-        {/* Top Header */}
-        <header className="sticky top-0 z-50 bg-surface/80 backdrop-blur-lg flex justify-between items-center px-8 py-4 shadow-sm border-b border-surface-container-high/50">
-          <div className="flex items-center gap-6">
-            <h1 className="text-xl font-headline font-black tracking-tighter text-on-background md:hidden">Pericles</h1>
-            <nav className="hidden md:flex items-center gap-6 font-headline font-medium tracking-tight text-sm">
-              <span className="text-primary border-b-2 border-primary pb-1 font-bold">Assistant</span>
-              <a href="/admin" className="text-outline hover:text-on-background transition-colors">Documents</a>
-            </nav>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="hidden md:block text-sm text-on-surface-variant">{user?.displayName || user?.email}</span>
-            <button
-              onClick={() => signOut(auth)}
-              className="text-xs text-outline hover:text-on-surface transition-colors px-3 py-1.5 rounded-lg hover:bg-surface-container-low"
-            >
-              Sign out
-            </button>
-          </div>
-        </header>
+        <PortalNavbar active="assistant" />
 
         {/* Chat Area */}
         <div className="flex-1 overflow-y-auto px-6 lg:px-12 py-8 custom-scrollbar space-y-8">
