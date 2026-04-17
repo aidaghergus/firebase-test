@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { signInWithPopup, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'firebase/auth'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { auth, googleProvider } from '../firebase.js'
 import { useAuth } from '../hooks/useAuth.js'
 
 export default function LoginPage() {
   const { user, loading: authLoading } = useAuth()
+  const location = useLocation()
+  const from = location.state?.from || '/app'
   const [mode, setMode] = useState('login') // 'login' | 'register'
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -20,7 +22,7 @@ export default function LoginPage() {
     )
   }
 
-  if (user) return <Navigate to="/app" replace />
+  if (user) return <Navigate to={from} replace />
 
   async function handleGoogleSignIn() {
     setError(null)

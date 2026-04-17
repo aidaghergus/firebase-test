@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth.js'
 
 function LoadingScreen() {
@@ -11,16 +11,17 @@ function LoadingScreen() {
 
 export function ProtectedRoute({ children }) {
   const { user, loading } = useAuth()
+  const location = useLocation()
   if (loading) return <LoadingScreen />
-  if (!user) return <Navigate to="/login" replace />
+  if (!user) return <Navigate to="/login" state={{ from: location.pathname }} replace />
   return children
 }
 
 export function AdminRoute({ children }) {
   const { user, role, loading } = useAuth()
+  const location = useLocation()
   if (loading) return <LoadingScreen />
-  if (!user) return <Navigate to="/login" replace />
-  console.log(role)
+  if (!user) return <Navigate to="/login" state={{ from: location.pathname }} replace />
   if (role !== 'admin') return <Navigate to="/app" replace />
   return children
 }

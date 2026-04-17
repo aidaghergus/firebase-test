@@ -1,19 +1,16 @@
 import { useState, useRef, useEffect } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { signOut } from 'firebase/auth'
 import { auth } from '../firebase.js'
 import { useAuth } from '../hooks/useAuth.js'
 import { useLanguage } from '../hooks/useLanguage.js'
-import { LANGUAGES } from '../i18n/landing.js'
+import { LANGUAGES, translations } from '../i18n/landing.js'
 
-/**
- * Top navbar shared across all portal pages.
- * active: 'assistant' | 'cases' | 'admin'
- * extraActions: optional JSX rendered between nav links and lang selector (e.g. a "New Case" button)
- */
 export default function PortalNavbar({ active, extraActions }) {
   const { user, role } = useAuth()
   const { lang, setLang } = useLanguage()
+  const navigate = useNavigate()
+  const t = translations[lang] || translations.en
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const userMenuRef = useRef(null)
 
@@ -28,93 +25,90 @@ export default function PortalNavbar({ active, extraActions }) {
   }, [])
 
   return (
-    <header className="sticky top-0 z-50 bg-surface/80 backdrop-blur-lg flex justify-between items-center px-8 py-4 shadow-sm border-b border-surface-container-high/50">
-      {/* Left: mobile logo + desktop nav links */}
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-2 md:hidden">
-          <img
-            src="https://i.imgur.com/5Sgvd5n.png"
-            alt="Pericles"
-            className="h-7"
-            loading="lazy"
-            onError={(e) => e.target.style.display = 'none'}
-          />
-          <span className="text-lg font-headline font-bold text-on-background">Pericles</span>
-        </div>
-        <nav className="hidden md:flex items-center gap-6 font-headline font-medium tracking-tight text-sm">
+    <nav className="fixed top-0 w-full z-50 bg-[#fcf9f8]/70 backdrop-blur-xl shadow-sm">
+      <div className="flex justify-between items-center px-12 py-6 max-w-screen-2xl mx-auto">
+
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2 sm:gap-3">
+          <img src="https://i.imgur.com/5Sgvd5n.png" alt="Pericles" className="h-8 sm:h-12" loading="lazy" onError={(e) => e.target.style.display = 'none'} />
+          <span className="text-lg sm:text-2xl font-bold text-primary leading-tight">Pericles</span>
+        </Link>
+
+        {/* Nav links */}
+        <div className="hidden md:flex items-center space-x-10 font-serif font-medium tracking-tight">
           <Link
             to="/app"
             className={active === 'assistant'
-              ? 'text-primary border-b-2 border-primary pb-1 font-bold'
-              : 'text-outline hover:text-on-background transition-colors'}
+              ? 'text-[#002349] border-b border-[#735a3a] pb-1'
+              : 'text-slate-600 hover:text-[#735a3a] transition-colors duration-300'}
           >
-            Assistant
+            {t.portal.assistant}
           </Link>
           <Link
             to="/cases"
             className={active === 'cases'
-              ? 'text-primary border-b-2 border-primary pb-1 font-bold'
-              : 'text-outline hover:text-on-background transition-colors'}
+              ? 'text-[#002349] border-b border-[#735a3a] pb-1'
+              : 'text-slate-600 hover:text-[#735a3a] transition-colors duration-300'}
           >
-            My Cases
+            {t.portal.myCases}
           </Link>
           {role === 'admin' && (
             <Link
               to="/admin"
               className={active === 'admin'
-                ? 'text-primary border-b-2 border-primary pb-1 font-bold'
-                : 'text-outline hover:text-on-background transition-colors'}
+                ? 'text-[#002349] border-b border-[#735a3a] pb-1'
+                : 'text-slate-600 hover:text-[#735a3a] transition-colors duration-300'}
             >
-              Documents
+              {t.portal.documents}
             </Link>
           )}
-        </nav>
-        {extraActions && <div className="flex items-center gap-3">{extraActions}</div>}
-      </div>
-
-      {/* Right: language selector + user dropdown */}
-      <div className="flex items-center gap-3">
-        <select
-          value={lang}
-          onChange={(e) => setLang(e.target.value)}
-          className="hidden sm:block text-xs font-medium text-primary border border-primary/30 rounded-md px-2 py-1.5 bg-transparent focus:outline-none cursor-pointer hover:border-primary transition-colors"
-        >
-          {LANGUAGES.map((l) => (
-            <option key={l.code} value={l.code}>{l.label}</option>
-          ))}
-        </select>
-
-        <div className="relative" ref={userMenuRef}>
-          <button
-            onClick={() => setUserMenuOpen((o) => !o)}
-            className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center hover:bg-primary/20 transition-colors"
-          >
-            <span
-              className="material-symbols-outlined text-lg text-primary"
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              account_circle
-            </span>
-          </button>
-          {userMenuOpen && (
-            <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-surface-container-high py-2 z-50">
-              <div className="px-4 py-3 border-b border-surface-container-high">
-                {user?.displayName && (
-                  <p className="text-sm font-semibold text-on-background truncate">{user.displayName}</p>
-                )}
-                <p className="text-xs text-outline truncate">{user?.email}</p>
-              </div>
-              <button
-                onClick={() => { signOut(auth); setUserMenuOpen(false) }}
-                className="w-full text-left px-4 py-2.5 text-sm text-outline hover:text-on-surface hover:bg-surface-container-low flex items-center gap-2 transition-colors"
-              >
-                <span className="material-symbols-outlined text-base">logout</span>
-                Sign out
-              </button>
-            </div>
-          )}
+          {extraActions}
         </div>
+
+        {/* Right: language + user */}
+        <div className="flex items-center gap-3">
+          <div className="hidden sm:block relative">
+            <select
+              value={lang}
+              onChange={(e) => setLang(e.target.value)}
+              className="appearance-none text-xs font-medium uppercase tracking-widest text-primary border border-primary/30 rounded-md pl-3 pr-6 py-1.5 bg-white focus:outline-none cursor-pointer hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300"
+            >
+              {LANGUAGES.map((l) => (
+                <option key={l.code} value={l.code}>{l.label}</option>
+              ))}
+            </select>
+            <span className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 material-symbols-outlined text-sm text-primary">expand_more</span>
+          </div>
+
+          <div className="relative" ref={userMenuRef}>
+            <button
+              onClick={() => setUserMenuOpen((o) => !o)}
+              className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+            >
+              <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary text-xs font-bold uppercase shadow-sm">
+                {(user?.displayName || user?.email || '?')[0]}
+              </div>
+              <span className="material-symbols-outlined text-sm text-slate-400">expand_more</span>
+            </button>
+            {userMenuOpen && (
+              <div className="absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-xl border border-surface-container-high py-2 z-50">
+                <div className="px-4 py-3 border-b border-surface-container-high">
+                  {user?.displayName && <p className="text-sm font-semibold text-on-background truncate">{user.displayName}</p>}
+                  <p className="text-xs text-outline truncate">{user?.email}</p>
+                </div>
+                <button
+                  onClick={() => { signOut(auth); setUserMenuOpen(false); navigate('/') }}
+                  className="w-full text-left px-4 py-2.5 text-sm text-outline hover:text-on-surface hover:bg-surface-container-low flex items-center gap-2 transition-colors"
+                >
+                  <span className="material-symbols-outlined text-base">logout</span>
+                  {t.portal.signOut}
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
       </div>
-    </header>
+    </nav>
   )
 }

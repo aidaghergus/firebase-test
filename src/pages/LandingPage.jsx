@@ -1,27 +1,29 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { signOut } from 'firebase/auth'
-import { auth } from '../firebase.js'
 import { useAuth } from '../hooks/useAuth.js'
 import { useLanguage } from '../hooks/useLanguage.js'
 import { translations, LANGUAGES, RTL_LANGS } from '../i18n/landing.js'
 
 export default function LandingPage() {
-  const { user, loading } = useAuth()
+  const { user } = useAuth()
   const { lang, setLang } = useLanguage()
-  const [userMenuOpen, setUserMenuOpen] = useState(false)
-  const userMenuRef = useRef(null)
+  const [activeSection, setActiveSection] = useState('')
   const t = translations[lang]
   const isRtl = RTL_LANGS.includes(lang)
 
   useEffect(() => {
-    function handleClickOutside(e) {
-      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
-        setUserMenuOpen(false)
-      }
-    }
-    document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    const ids = ['practice-areas', 'about', 'publications']
+    const observers = ids.map((id) => {
+      const el = document.getElementById(id)
+      if (!el) return null
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) setActiveSection(id) },
+        { threshold: 0.3 }
+      )
+      obs.observe(el)
+      return obs
+    })
+    return () => observers.forEach((obs) => obs?.disconnect())
   }, [])
 
   return (
@@ -35,67 +37,44 @@ export default function LandingPage() {
             <span className="text-lg sm:text-2xl font-bold text-primary leading-tight">Pericles</span>
           </div>
           <div className="hidden md:flex items-center space-x-10 font-serif font-medium tracking-tight">
-            <a className="text-[#002349] border-b border-[#735a3a] pb-1 hover:text-[#735a3a] transition-colors duration-300" href="#practice-areas">{t.nav.practiceAreas}</a>
-            <a className="text-slate-600 hover:text-[#735a3a] transition-colors duration-300" href="#practice-areas">{t.nav.caseLaw}</a>
-            <a className="text-slate-600 hover:text-[#735a3a] transition-colors duration-300" href="#about">{t.nav.resources}</a>
-            <a className="text-slate-600 hover:text-[#735a3a] transition-colors duration-300" href="#publications">{t.nav.publications}</a>
+            {[
+              { label: t.nav.resources,     href: '#about',          section: 'about' },
+              { label: t.nav.practiceAreas, href: '#practice-areas', section: 'practice-areas' },
+              { label: t.nav.publications,  href: '#publications',   section: 'publications' },
+            ].map(({ label, href, section }) => (
+              <a
+                key={label}
+                href={href}
+                className={
+                  activeSection === section
+                    ? 'text-[#002349] border-b border-[#735a3a] pb-1 transition-colors duration-300'
+                    : 'text-slate-600 hover:text-[#735a3a] transition-colors duration-300'
+                }
+              >
+                {label}
+              </a>
+            ))}
           </div>
-          <div className="flex items-center space-x-4">
-            {/* Language selector */}
-            <select
-              value={lang}
-              onChange={(e) => setLang(e.target.value)}
-              className="hidden sm:block text-xs font-medium text-primary border border-primary/30 rounded-md px-2 py-1.5 bg-transparent focus:outline-none cursor-pointer hover:border-primary transition-colors"
+          <div className="flex items-center gap-4">
+            <div className="hidden sm:block relative">
+              <select
+                value={lang}
+                onChange={(e) => setLang(e.target.value)}
+                className="appearance-none text-xs font-medium uppercase tracking-widest text-primary border border-primary/30 rounded-md pl-3 pr-6 py-1.5 bg-white focus:outline-none cursor-pointer hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300"
+              >
+                {LANGUAGES.map((l) => (
+                  <option key={l.code} value={l.code}>{l.label}</option>
+                ))}
+              </select>
+              <span className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 material-symbols-outlined text-sm text-primary">expand_more</span>
+            </div>
+            <Link
+              to="/app"
+              className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-widest text-primary border border-primary/30 px-4 py-1.5 rounded-md hover:bg-primary hover:text-on-primary hover:border-primary transition-all duration-300"
             >
-              {LANGUAGES.map((l) => (
-                <option key={l.code} value={l.code}>{l.label}</option>
-              ))}
-            </select>
-            {!loading && (
-              user ? (
-                <>
-                  <Link to="/app" className="bg-primary text-on-primary px-6 py-2.5 rounded-md font-medium text-sm tracking-wide hover:bg-primary-dim transition-all active:scale-95">
-                    {t.auth.enterPortal}
-                  </Link>
-                  {/* User icon + dropdown */}
-                  <div className="relative" ref={userMenuRef}>
-                    <button
-                      onClick={() => setUserMenuOpen((o) => !o)}
-                      className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center hover:bg-primary/20 transition-colors"
-                    >
-                      <span className="material-symbols-outlined text-lg text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>account_circle</span>
-                    </button>
-                    {userMenuOpen && (
-                      <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-surface-container-high py-2 z-50">
-                        <div className="px-4 py-3 border-b border-surface-container-high">
-                          {user.displayName && <p className="text-sm font-semibold text-on-background truncate">{user.displayName}</p>}
-                          <p className="text-xs text-outline truncate">{user.email}</p>
-                        </div>
-                        <button
-                          onClick={() => { signOut(auth); setUserMenuOpen(false) }}
-                          className="w-full text-left px-4 py-2.5 text-sm text-outline hover:text-on-surface hover:bg-surface-container-low flex items-center gap-2 transition-colors"
-                        >
-                          <span className="material-symbols-outlined text-base">logout</span>
-                          {t.auth.signOut}
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="text-sm text-primary hover:text-primary-dim font-medium transition-colors">
-                    {t.auth.signIn}
-                  </Link>
-                  <Link
-                    to="/login"
-                    className="bg-primary text-on-primary px-6 py-2.5 rounded-md font-medium text-sm tracking-wide hover:bg-primary-dim transition-all active:scale-95"
-                  >
-                    {t.auth.join}
-                  </Link>
-                </>
-              )
-            )}
+              {t.auth.enterPortal}
+              <span className="material-symbols-outlined text-sm">arrow_forward</span>
+            </Link>
           </div>
         </div>
       </nav>
